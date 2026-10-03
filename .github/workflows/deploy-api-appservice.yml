@@ -1,0 +1,44 @@
+name: CD - API no Azure App Service
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "API/**"
+      - ".github/workflows/deploy-api-appservice.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-api:
+    name: Publicar API no App Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+
+      - name: Restaurar dependências
+        run: dotnet restore "API/TechStore Cloud/TechStore Cloud.csproj"
+
+      - name: Publicar API
+        run: >
+          dotnet publish
+          "API/TechStore Cloud/TechStore Cloud.csproj"
+          -c Release
+          --no-restore
+          -o api-publish
+
+      - name: Implantar no Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: app-techstore-api-caua
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: api-publish
