@@ -31,7 +31,7 @@ jobs:
         working-directory: FRONT
         env:
           API_URL: ${{ vars.API_URL }}
-        run: sed -i "s|https://SUBSTITUA-PELA-URL-DA-API/api/v1|${API_URL}|g" src/environments/environment.production.ts
+        run: sed -i "s|https://app-techstore-api-caua.azurewebsites.net/api/v1|${API_URL}|g" src/environments/environment.production.ts
 
       - name: Compilar frontend Angular
         working-directory: FRONT
