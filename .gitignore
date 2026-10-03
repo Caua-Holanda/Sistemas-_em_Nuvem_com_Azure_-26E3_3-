@@ -1,0 +1,9 @@
+.vs/
+**/bin/
+**/obj/
+API/.dotnet/
+API/.nuget/
+API/**/techstore*.db*
+FRONT/node_modules/
+FRONT/.angular/
+FRONT/dist/

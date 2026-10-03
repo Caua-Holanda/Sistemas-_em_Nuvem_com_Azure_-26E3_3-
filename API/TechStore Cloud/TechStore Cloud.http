@@ -1,0 +1,46 @@
+@host = http://localhost:5093
+@productId = 00000000-0000-0000-0000-000000000000
+
+GET {{host}}/health/ready
+Accept: application/json
+
+###
+
+GET {{host}}/api/v1/products?page=1&pageSize=20
+Accept: application/json
+
+###
+
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Curso Azure Fundamentals",
+  "description": "Produto digital da TechStore Cloud",
+  "sku": "AZ-900",
+  "price": 99.90,
+  "stockQuantity": 100,
+  "isActive": true
+}
+
+###
+
+GET {{host}}/api/v1/products/{{productId}}
+
+###
+
+PUT {{host}}/api/v1/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "Curso Azure Fundamentals Atualizado",
+  "description": "Nova edição",
+  "sku": "AZ-900",
+  "price": 119.90,
+  "stockQuantity": 80,
+  "isActive": true
+}
+
+###
+
+DELETE {{host}}/api/v1/products/{{productId}}

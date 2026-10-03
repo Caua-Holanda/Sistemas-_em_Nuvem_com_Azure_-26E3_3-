@@ -1,0 +1,8 @@
+**/bin/
+**/obj/
+.git/
+.vs/
+docs/
+frontend/
+infra/
+TechStoreCloud.Tests/

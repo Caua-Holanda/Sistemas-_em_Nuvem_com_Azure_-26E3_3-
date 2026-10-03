@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitetura do MVP TechStore Cloud na Microsoft Azure</title>
+  <desc id="desc">Frontend em Storage conversa com API em VM, que acessa Azure SQL e Key Vault. Azure Monitor, Log Analytics e Application Insights observam a solução.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7fbfe"/><stop offset="1" stop-color="#e9f4fb"/></linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#087ea4"/></marker>
+    <filter id="shadow"><feDropShadow dx="0" dy="5" stdDeviation="7" flood-opacity=".12"/></filter>
+    <style>.title{font:700 30px Segoe UI,Arial;fill:#10233f}.sub{font:400 15px Segoe UI,Arial;fill:#5b6f84}.label{font:700 16px Segoe UI,Arial;fill:#10233f}.small{font:400 12px Segoe UI,Arial;fill:#5b6f84}.box{fill:#fff;stroke:#cbdde8;stroke-width:1.5;rx:14;filter:url(#shadow)}.line{stroke:#087ea4;stroke-width:2.5;fill:none;marker-end:url(#arrow)}.dash{stroke:#6994aa;stroke-width:2;fill:none;stroke-dasharray:7 7;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1400" height="820" fill="url(#bg)"/>
+  <text x="60" y="58" class="title">TechStore Cloud · Arquitetura do MVP</text>
+  <text x="60" y="86" class="sub">.NET 8 · Azure SQL · VM Linux · Blob Static Website · Observabilidade e segurança</text>
+  <rect x="280" y="115" width="1060" height="635" rx="28" fill="#fff" fill-opacity=".5" stroke="#65aeda" stroke-width="2"/>
+  <text x="310" y="153" class="label" fill="#0078d4">Grupo de Recursos Azure</text>
+
+  <rect class="box" x="45" y="290" width="180" height="130"/><text x="135" y="340" text-anchor="middle" class="label">Usuário</text><text x="135" y="370" text-anchor="middle" class="small">Navegador</text><text x="135" y="391" text-anchor="middle" class="small">HTTPS</text>
+
+  <rect class="box" x="330" y="220" width="220" height="165"/><image href="icons/storage-account.svg" x="408" y="245" width="64" height="64"/><text x="440" y="330" text-anchor="middle" class="label">Storage Account</text><text x="440" y="353" text-anchor="middle" class="small">Static Website ($web)</text><text x="440" y="371" text-anchor="middle" class="small">LRS + versionamento</text>
+  <rect class="box" x="645" y="220" width="220" height="165"/><image href="icons/virtual-machine.svg" x="723" y="245" width="64" height="64"/><text x="755" y="330" text-anchor="middle" class="label">Virtual Machine B1s</text><text x="755" y="353" text-anchor="middle" class="small">Docker · API REST .NET 8</text><text x="755" y="371" text-anchor="middle" class="small">NSG · Managed Identity</text>
+  <rect class="box" x="960" y="220" width="220" height="165"/><image href="icons/sql-database.svg" x="1038" y="245" width="64" height="64"/><text x="1070" y="330" text-anchor="middle" class="label">Azure SQL Database</text><text x="1070" y="353" text-anchor="middle" class="small">Serverless · oferta gratuita</text><text x="1070" y="371" text-anchor="middle" class="small">EF Core + migrações</text>
+
+  <rect class="box" x="645" y="465" width="220" height="145"/><image href="icons/key-vault.svg" x="723" y="485" width="64" height="64"/><text x="755" y="570" text-anchor="middle" class="label">Azure Key Vault</text><text x="755" y="592" text-anchor="middle" class="small">Connection string protegida</text>
+
+  <rect class="box" x="335" y="655" width="190" height="70"/><image href="icons/azure-monitor.svg" x="355" y="672" width="36" height="36"/><text x="405" y="686" class="label">Azure Monitor</text><text x="405" y="705" class="small">Métricas e alertas</text>
+  <rect class="box" x="620" y="655" width="210" height="70"/><image href="icons/log-analytics.svg" x="640" y="672" width="36" height="36"/><text x="690" y="686" class="label">Log Analytics</text><text x="690" y="705" class="small">Logs e consultas KQL</text>
+  <rect class="box" x="925" y="655" width="225" height="70"/><image href="icons/application-insights.svg" x="945" y="672" width="36" height="36"/><text x="995" y="686" class="label">Application Insights</text><text x="995" y="705" class="small">Disponibilidade e falhas</text>
+
+  <path class="line" d="M225 330 H330"/><text x="277" y="317" text-anchor="middle" class="small">HTML/CSS/JS</text>
+  <path class="line" d="M550 302 H645"/><text x="597" y="289" text-anchor="middle" class="small">REST/JSON</text>
+  <path class="line" d="M865 302 H960"/><text x="912" y="289" text-anchor="middle" class="small">TLS/TDS</text>
+  <path class="dash" d="M755 385 V465"/><text x="772" y="430" class="small">segredo</text>
+  <path class="dash" d="M700 610 L520 670"/><path class="dash" d="M755 610 V655"/><path class="dash" d="M810 610 L955 670"/>
+
+  <rect x="60" y="505" width="420" height="98" rx="14" fill="#10233f"/>
+  <text x="82" y="537" font-family="Segoe UI,Arial" font-weight="700" font-size="15" fill="#fff">GitHub Actions · CI/CD</text>
+  <text x="82" y="562" font-family="Segoe UI,Arial" font-size="12" fill="#c9e8f4">Build + testes → imagem no GHCR → atualização da VM</text>
+  <text x="82" y="583" font-family="Segoe UI,Arial" font-size="12" fill="#c9e8f4">Frontend → contêiner $web do Storage</text>
+</svg>

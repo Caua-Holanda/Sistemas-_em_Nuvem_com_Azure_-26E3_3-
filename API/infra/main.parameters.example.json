@@ -1,0 +1,10 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "prefix": { "value": "techstore-seunome" },
+    "vmSshPublicKey": { "value": "ssh-ed25519 SUBSTITUA_PELA_SUA_CHAVE" },
+    "sqlAdminPassword": { "value": "INFORME_NO_TERMINAL_NAO_COMMITAR" },
+    "sshSourceCidr": { "value": "SEU_IP_PUBLICO/32" }
+  }
+}

@@ -1,0 +1,222 @@
+
+<main class="page-shell">
+
+  @if (feedback(); as message) {
+    <div class="alert" [class.alert--success]="message.type === 'success'" role="alert">
+      <span aria-hidden="true">{{ message.type === 'success' ? '✓' : '!' }}</span>
+      {{ message.text }}
+    </div>
+  }
+
+  <section class="card form-card" aria-labelledby="form-title">
+    <div class="card__header">
+      <div>
+        <span class="card__step">01</span>
+        <div>
+          <h2 id="form-title">{{ editingId() ? 'Editar produto' : 'Novo produto' }}</h2>
+          <p>Os campos marcados com * são obrigatórios.</p>
+        </div>
+      </div>
+      @if (editingId()) {
+        <button class="button button--ghost" type="button" (click)="resetForm()">
+          Cancelar edição
+        </button>
+      }
+    </div>
+
+    <form [formGroup]="productForm" (ngSubmit)="save()" novalidate>
+      <div class="form-grid">
+        <label class="field field--wide">
+          <span>Nome *</span>
+          <input
+            formControlName="name"
+            type="text"
+            maxlength="120"
+            placeholder="Ex.: Notebook Pro 15"
+          />
+          @if (hasError('name', 'required') || hasError('name', 'minlength')) {
+            <small>Informe um nome com pelo menos 2 caracteres.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>SKU *</span>
+          <input formControlName="sku" type="text" maxlength="40" placeholder="Ex.: NOTE-001" />
+          @if (hasError('sku', 'required') || hasError('sku', 'minlength')) {
+            <small>Informe um SKU com pelo menos 2 caracteres.</small>
+          } @else if (hasError('sku', 'pattern')) {
+            <small>Use somente letras, números, hífen ou sublinhado.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Preço *</span>
+          <div class="input-prefix">
+            <span>R$</span>
+            <input formControlName="price" type="number" min="0.01" step="0.01" />
+          </div>
+          @if (hasError('price', 'required') || hasError('price', 'min')) {
+            <small>O preço deve ser maior ou igual a R$ 0,01.</small>
+          }
+        </label>
+
+        <label class="field">
+          <span>Quantidade em estoque *</span>
+          <input formControlName="stockQuantity" type="number" min="0" step="1" />
+          @if (
+            hasError('stockQuantity', 'required') ||
+            hasError('stockQuantity', 'min') ||
+            hasError('stockQuantity', 'pattern')
+          ) {
+            <small>Informe uma quantidade inteira igual ou maior que zero.</small>
+          }
+        </label>
+
+        <label class="field field--full">
+          <span>Descrição</span>
+          <textarea
+            formControlName="description"
+            rows="3"
+            maxlength="500"
+            placeholder="Detalhes opcionais do produto"
+          ></textarea>
+          <em>{{ productForm.controls.description.value.length }}/500</em>
+        </label>
+
+        <label class="switch-field">
+          <input formControlName="isActive" type="checkbox" />
+          <span class="switch" aria-hidden="true"></span>
+          <span>
+            <strong>Produto ativo</strong>
+            <small>Disponível para consulta no catálogo</small>
+          </span>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button class="button button--primary" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Salvando...' : editingId() ? 'Salvar alterações' : 'Cadastrar produto' }}
+        </button>
+        <button
+          class="button button--secondary"
+          type="button"
+          (click)="resetForm()"
+          [disabled]="saving()"
+        >
+          Limpar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="card table-card" aria-labelledby="products-title">
+    <div class="card__header table-heading">
+      <div>
+        <span class="card__step">02</span>
+        <div>
+          <h2 id="products-title">Produtos cadastrados</h2>
+          <p>Consulte, edite ou exclua itens do catálogo.</p>
+        </div>
+      </div>
+
+      <form class="search" [formGroup]="searchForm" (ngSubmit)="loadProducts()" role="search">
+        <label class="sr-only" for="search-products">Buscar produto</label>
+        <input
+          id="search-products"
+          formControlName="search"
+          type="search"
+          placeholder="Buscar por nome ou SKU"
+        />
+        @if (searchForm.controls.search.value) {
+          <button
+            class="search__clear"
+            type="button"
+            (click)="clearSearch()"
+            aria-label="Limpar busca"
+          >
+            ×
+          </button>
+        }
+        <button class="button button--search" type="submit">Buscar</button>
+      </form>
+    </div>
+
+    @if (loading()) {
+      <app-loading />
+    } @else if (products().length === 0) {
+      <div class="empty-state">
+        <span aria-hidden="true">▦</span>
+        <h3>Nenhum produto encontrado</h3>
+        <p>
+          {{
+            searchForm.controls.search.value
+              ? 'Tente outro termo de busca.'
+              : 'Cadastre o primeiro produto usando o formulário acima.'
+          }}
+        </p>
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>SKU</th>
+              <th>Preço</th>
+              <th>Estoque</th>
+              <th>Status</th>
+              <th>Atualização</th>
+              <th class="actions-column">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (product of products(); track product.id) {
+              <tr>
+                <td>
+                  <strong>{{ product.name }}</strong>
+                  <small>{{ product.description || 'Sem descrição' }}</small>
+                </td>
+                <td>
+                  <code>{{ product.sku }}</code>
+                </td>
+                <td>{{ product.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</td>
+                <td>{{ product.stockQuantity }}</td>
+                <td>
+                  <span class="badge" [class.badge--inactive]="!product.isActive">
+                    {{ product.isActive ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+                <td>
+                  {{ product.updatedAtUtc || product.createdAtUtc | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+                <td>
+                  <div class="row-actions">
+                    <button
+                      class="action-button"
+                      type="button"
+                      (click)="edit(product)"
+                      title="Editar produto"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      class="action-button action-button--danger"
+                      type="button"
+                      (click)="remove(product)"
+                      [disabled]="deletingId() === product.id"
+                      title="Excluir produto"
+                    >
+                      {{ deletingId() === product.id ? 'Excluindo...' : 'Excluir' }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>
+
+<footer>TechStore Cloud · Projeto prático de Sistemas em Nuvem com Azure</footer>
