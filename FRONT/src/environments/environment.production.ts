@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://SUBSTITUA-PELA-URL-DA-API/api/v1',
+  apiUrl: 'https://app-techstore-api-caua.azurewebsites.net/api/v1',
 };
