@@ -1,4 +1,4 @@
-# Frontend Angular — TechStore Cloud
+# Frontend Angular TechStore Cloud
 
 Aplicação de página única para administrar o catálogo de produtos consumindo a API REST do projeto.
 
@@ -10,22 +10,14 @@ Aplicação de página única para administrar o catálogo de produtos consumind
 - Mensagens de sucesso e erro retornadas pela API.
 - Layout responsivo para computador e celular.
 
-## Arquitetura
+## Estrutura
 
-```text
-src/app/
-├── core/
-│   ├── models/          # Contratos de dados
-│   └── services/        # Comunicação HTTP com a API
-├── pages/
-│   └── products/        # Tela e regras de apresentação
-├── shared/
-│   └── components/      # Componentes reutilizáveis
-├── app.config.ts
-└── app.routes.ts
-```
+- `core/models`: contratos de dados.
+- `core/services`: comunicação com a API.
+- `pages/products`: tela de produtos.
+- `shared/components`: componentes reutilizáveis.
 
-Os endereços da API ficam em `src/environments`. O ambiente local usa `http://localhost:5093/api/v1`. Antes do deploy manual, substitua o valor de produção; no GitHub Actions isso é feito pela variável `API_URL`.
+O ambiente local usa `http://localhost:5093/api/v1`. No deploy, o GitHub Actions descobre o domínio do App Service automaticamente.
 
 ## Executar
 
