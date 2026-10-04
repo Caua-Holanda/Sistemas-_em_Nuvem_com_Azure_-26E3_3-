@@ -6,7 +6,7 @@ MVP de cadastro de produtos para a Parte 2 do projeto prático de Sistemas em Nu
 
 - `API/`: API REST .NET, domínio, persistência, testes, Docker, Bicep e documentação Azure.
 - `FRONT/`: frontend Angular com cadastro, consulta, edição e exclusão de produtos na mesma tela.
-- `.github/workflows/`: integração contínua e implantação da API na VM e do frontend no Blob Static Website.
+- `.github/workflows/`: integração contínua e implantação automática da API no App Service e do frontend no Blob Static Website.
 
 ## Executar localmente
 
@@ -36,18 +36,16 @@ Acesse `http://localhost:4200`. A API estará em `http://localhost:5093` e o Swa
 - [Infraestrutura como código](API/infra/README.md)
 - [Frontend Angular](FRONT/README.md)
 
-## Variáveis para o deploy no GitHub
+## Deploy automatizado no GitHub
 
-Crie o ambiente `production` e cadastre os segredos `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` e `AZURE_SUBSCRIPTION_ID`. Cadastre também estas variáveis, usando as saídas do Bicep e os nomes dos recursos:
+O workflow `CD - API e Frontend no Azure` é executado após cada push na `main` que altere a API, o frontend ou o próprio workflow. Ele:
 
-| Variável | Conteúdo |
-|---|---|
-| `API_URL` | Saída `apiUrl`, incluindo `/api/v1` |
-| `API_HOST` | Saída `apiHost`, sem `https://` |
-| `FRONTEND_URL` | Saída `frontendUrl`, sem barra final |
-| `AZURE_RESOURCE_GROUP` | Nome do grupo de recursos |
-| `AZURE_VM_NAME` | Saída `vmName` |
-| `AZURE_KEY_VAULT_NAME` | Saída `keyVaultName` |
-| `AZURE_STORAGE_ACCOUNT` | Nome da Storage Account criada pelo Bicep |
+1. compila e testa a solução .NET;
+2. publica a API no App Service;
+3. obtém do Azure o domínio real do App Service;
+4. compila o Angular com esse domínio;
+5. publica o resultado no contêiner `$web` da Storage Account.
 
-O deploy é manual pela aba Actions ou automático ao publicar uma tag iniciada por `v`.
+As credenciais OIDC do App Service já são mantidas nos segredos criados pelo Centro de Implantação. Em **Settings > Secrets and variables > Actions**, adicione apenas o segredo de repositório `AZURE_STORAGE_CONNECTION_STRING`, copiando a cadeia de conexão em **Storage Account > Chaves de acesso > Mostrar chaves**. Nunca coloque esse valor no código.
+
+Também é possível executar o workflow manualmente pela aba **Actions**.
